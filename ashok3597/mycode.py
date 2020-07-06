@@ -17,6 +17,16 @@ def filter_instances(project):
     return instances
 
 @click.group()
+
+def cli():
+	"""Managing the snapshots"""
+
+@cli.group('volumes')
+
+def volumes():
+	"""Commands for Volumes"""
+
+@cli.group('instances)
 def instances():
     """commands for instances"""
 
@@ -73,4 +83,4 @@ def stop_instances(project):
     return
 
 if __name__="__main__":
-    instances()
+    cli()
