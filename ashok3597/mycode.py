@@ -1,4 +1,5 @@
 import boto3
+import botocore
 import click
 
 session = boto3.Session(profile_name="ashok3597")
@@ -54,14 +55,13 @@ def volumes():
 
 def list_volumes(project):
     "List of EC2 Volumes"
-    volumes= []
-
+    
     instances = filter_instances(project)
 	for i in instances:
 		for v in i.volumes.all():
 			print(",".join((
-				v.id
-				i.id
+				v.id,
+				i.id,
 				v.state,
 				str.(v.size) + "GiB"
 				v.encrypted and "Encrytped" or "Not encrypted"
@@ -99,7 +99,6 @@ def list_function(project):
 
 def stop_instances(project):
     """Stop Instances"""
-    instances = []
 
     instances = filter_instances(project)
 
@@ -114,14 +113,39 @@ def stop_instances(project):
 
 def start_instances(project):
     """start Instances"""
-    instances = []
-
+    
     instances = filter_instances(project)
 
     for i in instances:
         print("Starting [{0}..." .format(i.id))
         i.start()
 
+    return
+	   
+@instances.command('snapshot')
+@click.option('--project', default = None, help = "Only Volume for the project")
+
+def start_snapshots(project):
+    """start Snapshots"""
+
+    instances = filter_instances(project)
+
+    for i in instances:
+	print("Stopping {0}".format(i.id))
+	i.stop()
+	i.wait_until_stopped()
+	
+	for v in i.volumes.all():
+		print("Creating Snapshots of {0}".format(v.id))
+		v.create_snapshot("Description = "Created by Snapshot Analyzer")
+        
+	print("Starting [{0}..." .format(i.id))
+        
+	i.start()
+	i.wait_until_running()
+	
+	
+    print('Job is done')
     return
 
 if __name__="__main__":
