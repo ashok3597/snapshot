@@ -27,8 +27,7 @@ def cli():
 
 def list_snapshots(project):
     "List of Volume snapshots"
-    snapshots= []
-
+    
     instances = filter_instances(project)
 
 	for i in instances:
@@ -42,7 +41,7 @@ def list_snapshots(project):
 					s.progress,
 					s.start_time.strftime("%c")
 				)))
-	
+				if s.state = 'completed': break				
 	return
 
 @cli.group('volumes')
@@ -77,8 +76,7 @@ def instances():
 
 def list_function(project):
     "List of EC2 instances"
-    instances = []
-
+   
     instances = filter_instances(project)
 
     for i in instances:
