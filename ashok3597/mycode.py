@@ -26,6 +26,25 @@ def cli():
 def volumes():
 	"""Commands for Volumes"""
 
+@volumes.command('list')
+@click.option('--project', default = None, help = "Only Volumes for the project (tag Project:<name>)")
+
+def list_volumes(project):
+    "List of EC2 Volumes"
+    volumes= []
+
+    instances = filter_instances(project)
+	for i in instances:
+		for v in i.volumes.all():
+			print(",".join((
+				v.id
+				i.id
+				v.state,
+				str.(v.size) + "GiB"
+				v.encrypted and "Encrytped" or "Not encrypted"
+			)))
+	return
+
 @cli.group('instances)
 def instances():
     """commands for instances"""
