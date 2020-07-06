@@ -112,7 +112,7 @@ def stop_instances(project):
 @instances.command('start')
 @click.option('--project', default = None, help = "Only instances for the project")
 
-def stop_instances(project):
+def start_instances(project):
     """start Instances"""
     instances = []
 
